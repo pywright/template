@@ -1,0 +1,18 @@
+{
+  "artifact": "my-project",
+  "title": "My Project",
+  "license": [
+    "MIT",
+    "Apache-2.0",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "GPL-3.0"
+  ],
+  "__version": "1.0.0",
+  "__python": "3.12",
+  "__module": "{{ cookiecutter.artifact | replace('-', '_') }}",
+  "__title": "{{ ' '.join(cookiecutter.title.split()).removesuffix('.').rstrip() }}",
+  "__author": "{{ git_config('user.name') }}",
+  "__email": "{{ git_config('user.email') }}",
+  "_extensions": ["extensions.git.GitExtension"]
+}
