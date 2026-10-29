@@ -2,11 +2,11 @@ import subprocess
 
 import pytest
 
-from tests.helpers import Generate, matrix
+from tests.helpers import Generate, case_id, matrix
 
 
 @pytest.mark.build
-@pytest.mark.parametrize("context", matrix(), ids=lambda c: "-".join(c.values()))
+@pytest.mark.parametrize("context", matrix(), ids=case_id)
 def test_whenAnyParametersAreChosen_expectMakeBuildPasses(
     generate: Generate, context: dict[str, str]
 ) -> None:

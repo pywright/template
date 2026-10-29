@@ -69,6 +69,5 @@ git-clean: ## Clean the project using git clean
 # --------------------------------------- BUILD ----------------------------------------
 
 .PHONY: build
-# build: install-deps lint test  ## Build source distribution and wheel  # TODO: replace
-build: install-deps lint  ## Build source distribution and wheel
+build: install-deps lint test  ## Build source distribution and wheel
 	uv build

@@ -4,11 +4,12 @@ import pytest
 from jinja2 import Environment
 
 from extensions.git import GitExtension, git_config
+from tests.helpers import AUTHOR, EMAIL
 
 
 def test_whenKeyIsSet_expectValueReturned() -> None:
-    assert git_config("user.name") == "Jane Doe"
-    assert git_config("user.email") == "jane.doe@example.com"
+    assert git_config("user.name") == AUTHOR
+    assert git_config("user.email") == EMAIL
 
 
 def test_whenKeyIsUnset_expectExitWithMessage() -> None:
@@ -30,4 +31,4 @@ def test_whenExtensionIsLoaded_expectGitConfigAvailableInTemplates() -> None:
 
     rendered = env.from_string("{{ git_config('user.email') }}").render()
 
-    assert rendered == "jane.doe@example.com"
+    assert rendered == EMAIL

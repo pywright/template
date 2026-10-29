@@ -80,6 +80,12 @@ quote-style = "double"
 indent-style = "space"
 docstring-code-format = true
 
+[tool.pyrefly]
+project-excludes = ["**/*cookiecutter.artifact*/**"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
 [tool.uv]
 package = false
 default-groups = "all"
