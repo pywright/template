@@ -2,7 +2,7 @@ from datetime import datetime
 
 import pytest
 
-from tests.helpers import Generate, choices
+from tests.helpers import AUTHOR, Generate, choices
 
 # license -> (first line, last line); guards against wrong or truncated text.
 LICENSES = {
@@ -30,21 +30,19 @@ COPYRIGHT_LINES = {
 }
 VERBATIM = [name for name in LICENSES if name not in COPYRIGHT_LINES]
 
-AUTHOR = "Jane Doe"
 
-
-def test_whenLicenseChoicesChange_expectEveryChoiceIsCovered() -> None:
+def test_whenLicenseChoicesAreListed_expectEveryChoiceIsCovered() -> None:
     assert set(LICENSES) == set(choices()["license"])
 
 
-def test_whenNoLicenseIsChosen_expectMit(generate: Generate) -> None:
+def test_whenLicenseIsNotSet_expectMitLicense(generate: Generate) -> None:
     text = (generate() / "LICENSE").read_text()
 
     assert text.strip().splitlines()[0] == LICENSES["MIT"][0]
 
 
 @pytest.mark.parametrize("license", LICENSES)
-def test_whenLicenseIsChosen_expectOnlyThatLicenseFile(
+def test_whenLicenseIsSet_expectOnlyThatLicenseFile(
     generate: Generate, license: str
 ) -> None:
     project = generate(license=license)
@@ -82,7 +80,7 @@ def test_whenLicenseIsVerbatim_expectAuthorNotInjected(
 
 
 @pytest.mark.parametrize("license", COPYRIGHT_LINES)
-def test_whenLicenseIsRendered_expectNoLeftoverPlaceholders(
+def test_whenLicenseIsSet_expectNoLeftoverPlaceholders(
     generate: Generate, license: str
 ) -> None:
     text = (generate(license=license) / "LICENSE").read_text()

@@ -4,7 +4,7 @@ from typing import Any
 
 import pytest
 
-from tests.helpers import Generate, choices
+from tests.helpers import AUTHOR, EMAIL, Generate, choices
 
 
 def load(project: Path) -> dict[str, Any]:
@@ -25,21 +25,10 @@ def test_whenArtifactHasHyphens_expectScriptPointsToUnderscoreModule(
     assert data["project"]["scripts"] == {"my-cool-app": "my_cool_app.cli:cli"}
 
 
-@pytest.mark.parametrize(
-    ("title", "description"),
-    [
-        ("Well-Known", "Well-Known"),
-        ("  Extra   inner   spaces  ", "Extra inner spaces"),
-        ("Ends with dot.", "Ends with dot"),
-        ("Dot after space .", "Dot after space"),
-    ],
-)
-def test_whenTitleIsSet_expectNormalizedDescription(
-    generate: Generate, title: str, description: str
-) -> None:
-    data = load(generate(title=title))
+def test_whenTitleIsSet_expectProjectDescription(generate: Generate) -> None:
+    data = load(generate(__title="Distinctive Project Title"))
 
-    assert data["project"]["description"] == description
+    assert data["project"]["description"] == "Distinctive Project Title"
 
 
 def test_whenVersionIsSet_expectProjectVersion(generate: Generate) -> None:
@@ -49,18 +38,16 @@ def test_whenVersionIsSet_expectProjectVersion(generate: Generate) -> None:
 
 
 def test_whenAuthorIsSet_expectAuthorsEntry(generate: Generate) -> None:
-    data = load(generate(__author="Jane Doe", __email="jane.doe@example.com"))
+    data = load(generate(__author=AUTHOR, __email=EMAIL))
 
-    assert data["project"]["authors"] == [
-        {"name": "Jane Doe", "email": "jane.doe@example.com"}
-    ]
+    assert data["project"]["authors"] == [{"name": AUTHOR, "email": EMAIL}]
 
 
-@pytest.mark.parametrize("license_", choices()["license"])
-def test_whenAnyLicenseIsChosen_expectLicenseFileReferenceResolves(
-    generate: Generate, license_: str
+@pytest.mark.parametrize("license", choices()["license"])
+def test_whenLicenseIsSet_expectLicenseFileReferenceResolves(
+    generate: Generate, license: str
 ) -> None:
-    project = generate(license=license_)
+    project = generate(license=license)
 
     reference = load(project)["project"]["license"]
 

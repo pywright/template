@@ -17,6 +17,7 @@ classifiers = [
 requires-python = ">=3.12"
 
 dependencies = [
+    "click >=8.5.0",
 ]
 
 [dependency-groups]
@@ -69,5 +70,5 @@ indent-style = "space"
 docstring-code-format = true
 
 [tool.uv]
-package = false
+package = true
 default-groups = "all"

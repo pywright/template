@@ -1,6 +1,7 @@
 {
   "artifact": "my-project",
   "title": "My Project",
+  "description": "Nothing fancy. Yet.",
   "license": [
     "MIT",
     "Apache-2.0",
@@ -12,6 +13,7 @@
   "__python": "3.12",
   "__module": "{{ cookiecutter.artifact | replace('-', '_') }}",
   "__title": "{{ ' '.join(cookiecutter.title.split()).removesuffix('.').rstrip() }}",
+  "__description": "{% set d = ' '.join(cookiecutter.description.split()) %}{{ d if not d or d[-1] in '.!?' else d ~ '.' }}",
   "__author": "{{ git_config('user.name') }}",
   "__email": "{{ git_config('user.email') }}",
   "_extensions": ["extensions.git.GitExtension"]

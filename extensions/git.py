@@ -25,4 +25,4 @@ class GitExtension(Extension):
 
     def __init__(self, environment: Environment) -> None:
         super().__init__(environment)
-        environment.globals["git_config"] = git_config
+        environment.globals["git_config"] = git_config  # pyrefly: ignore[unsupported-operation]

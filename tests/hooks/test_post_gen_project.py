@@ -6,4 +6,5 @@ def test_whenProjectIsGenerated_expectGitRepositoryInitialized(
 ) -> None:
     result = cookies.bake()
 
+    assert result.project_path is not None
     assert (result.project_path / ".git").is_dir()
