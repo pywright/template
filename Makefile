@@ -54,6 +54,11 @@ test: install-deps  ## Run pytest with coverage
 	uv run pytest -s -v --cov --cov-report=term-missing \
 		--junit-xml=junit.xml --cov-report=xml:coverage.xml
 
+.PHONY: test-fast
+test-fast: install-deps  ## Run pytest with coverage, skipping slow build tests
+	uv run pytest -s -v -m "not build" --cov --cov-report=term-missing \
+		--junit-xml=junit.xml --cov-report=xml:coverage.xml
+
 .PHONY: git-clean
 git-clean: ## Clean the project using git clean
 	git clean -Xdf

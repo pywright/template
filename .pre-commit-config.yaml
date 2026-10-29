@@ -1,3 +1,5 @@
+exclude: '^\{\{cookiecutter\.artifact\}\}/'
+
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
@@ -7,6 +9,7 @@ repos:
         exclude_types: [makefile]
       - id: check-yaml
       - id: check-toml
+      - id: check-json
       - id: check-added-large-files
       - id: check-symlinks
 
