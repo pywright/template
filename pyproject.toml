@@ -1,0 +1,77 @@
+[project]
+name = "template"
+version = "1.0.0"
+description = "Skip the setup. Start building."
+license = { file = "LICENSE" }
+readme = "README.md"
+
+authors = [
+    { name = "Pywright", email = "info@pywright.io" },
+]
+
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Code Generators",
+]
+
+requires-python = ">=3.12"
+
+dependencies = [
+]
+
+[project.urls]
+Homepage = "https://github.com/pywright/template"
+Documentation = "https://github.com/pywright/template"
+Repository = "https://github.com/pywright/template"
+Issues = "https://github.com/pywright/template/issues"
+
+[dependency-groups]
+dev = [
+    "mbake >=1.4.6",
+    "pre-commit >=4.7.0",
+    "pyrefly >=1.3.2",
+    "pytest >=9.1.1",
+    "pytest-cov >=7.1.0",
+    "ruff >=0.17.0",
+    "shellcheck-py >=0.11.0.1",
+    "shfmt-py >=4.2.0",
+]
+
+[tool.ruff]
+line-length = 88
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # import sorting
+    "UP",   # pyupgrade
+    "B",    # bugbear
+    "S",    # security
+    "D",    # docstrings
+    "ARG",  # unused arguments
+    "SIM",  # simplify
+    "PL",   # pylint
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["D", "PL", "S"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "pep257"
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+docstring-code-format = true
+
+[tool.uv]
+package = false
+default-groups = "all"
