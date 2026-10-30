@@ -81,10 +81,13 @@ indent-style = "space"
 docstring-code-format = true
 
 [tool.pyrefly]
-project-excludes = ["**/*cookiecutter.artifact*/**"]
+project-excludes = ["**/*cookiecutter*/**"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[tool.coverage.report]
+omit = ["**/*cookiecutter*/**"]
 
 [tool.uv]
 package = false
