@@ -1,4 +1,4 @@
-"""{{cookiecutter.__title}}."""
+"""{{ cookiecutter.__title }}."""
 
 import logging
 import os
@@ -33,9 +33,9 @@ def configure_logger(level: int) -> None:
 
 @click.command()
 @click.option("-v", "--verbose", is_flag=True, help="Enables verbose mode.")
-@click.version_option(version("{{cookiecutter.artifact}}"))
+@click.version_option(version("{{ cookiecutter.artifact }}"))
 def cli(verbose: bool) -> None:
-    """Entry point for {{cookiecutter.artifact}} CLI."""
+    """Entry point for {{ cookiecutter.artifact }} CLI."""
     configure_logger(logging.DEBUG if verbose else logging.INFO)
 
     click.echo("{{ cookiecutter.artifact }} is ready.")
