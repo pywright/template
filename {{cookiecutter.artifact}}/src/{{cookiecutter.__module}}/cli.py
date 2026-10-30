@@ -1,9 +1,8 @@
 """{{ cookiecutter.__title }}."""
 
 import logging
-import os
-import sys
 from importlib.metadata import version
+from pathlib import Path
 
 import click
 
@@ -15,20 +14,22 @@ class LogFormatter(logging.Formatter):
     _LINE = "%(pathname)s::%(funcName)s:%(lineno)d"
     _FMT = f"%(name)s - %(levelname)s - {_LINE} - %(message)s"
     _FMT_TTY = f"%(asctime)s - {_FMT}"
+    _DATEFMT = "%Y-%m-%dT%H:%M:%S"
 
-    def __init__(self) -> None:
-        super().__init__(self._FMT if not sys.stdout.isatty() else self._FMT_TTY)
+    def __init__(self, tty: bool) -> None:
+        super().__init__(self._FMT_TTY if tty else self._FMT, datefmt=self._DATEFMT)
 
     def format(self, record: logging.LogRecord) -> str:
-        sections = record.pathname.split(os.path.sep)
-        record.pathname = os.path.sep.join(sections[-self._MAX_FOLDERS :])
+        parts = Path(record.pathname).parts[-self._MAX_FOLDERS :]
+        record.pathname = str(Path(*parts))
         return super().format(record)
 
 
 def configure_logger(level: int) -> None:
     """Configure logging format."""
-    logging.basicConfig(level=level, datefmt="%Y-%m-%dT%H:%M:%S")
-    logging.getLogger().handlers[0].setFormatter(LogFormatter())
+    handler = logging.StreamHandler()
+    handler.setFormatter(LogFormatter(tty=handler.stream.isatty()))
+    logging.basicConfig(level=level, handlers=[handler])
 
 
 @click.command()
