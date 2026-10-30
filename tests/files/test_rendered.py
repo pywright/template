@@ -9,6 +9,7 @@ MODULE = "distinctive_artifact"
 
 EXPECTED_FILES = (
     ".editorconfig",
+    "AGENTS.md",
     ".github/workflows/ci.yml",
     ".github/workflows/sbom.yml",
     ".gitignore",
