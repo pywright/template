@@ -20,9 +20,6 @@ jobs:
         with:
           enable-cache: true
 
-      - name: Install dependencies
-        run: make install-deps
-
       - name: Run linters
         run: make lint
 
