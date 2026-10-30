@@ -13,6 +13,16 @@ def test_whenProjectIsGenerated_expectCiWorkflowRunsLintTestAndBuild(
     assert "run: make build" in content
 
 
+def test_whenProjectIsGenerated_expectCiWorkflowTokenIsReadOnly(
+    generate: Generate,
+) -> None:
+    project = generate()
+
+    content = (project / ".github" / "workflows" / "ci.yml").read_text()
+
+    assert "permissions:\n  contents: read\n" in content
+
+
 def test_whenProjectIsGenerated_expectSbomWorkflowKeepsGithubTokenExpression(
     generate: Generate,
 ) -> None:
