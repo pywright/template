@@ -15,7 +15,6 @@ jobs:
 
       - uses: astral-sh/setup-uv@v5
         with:
-          python-version: "3.12"
           enable-cache: true
 
       - name: Install dependencies
