@@ -70,5 +70,8 @@ indent-style = "space"
 docstring-code-format = true
 
 [tool.uv]
-package = true
 default-groups = "all"
+
+[build-system]
+requires = ["uv_build>=0.13.6,<0.14"]
+build-backend = "uv_build"
