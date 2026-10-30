@@ -11,6 +11,12 @@ def load(project: Path) -> dict[str, Any]:
     return tomllib.loads((project / "pyproject.toml").read_text())
 
 
+def test_whenProjectIsGenerated_expectUvBuildBackend(generate: Generate) -> None:
+    data = load(generate())
+
+    assert data["build-system"]["build-backend"] == "uv_build"
+
+
 def test_whenArtifactIsSet_expectProjectName(generate: Generate) -> None:
     data = load(generate(artifact="my-cool-app"))
 
