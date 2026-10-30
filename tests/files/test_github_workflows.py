@@ -1,15 +1,13 @@
 from tests.helpers import Generate
 
 
-def test_whenProjectIsGenerated_expectCiWorkflowRunsLintTestAndBuild(
+def test_whenProjectIsGenerated_expectCiWorkflowRunsMakeBuild(
     generate: Generate,
 ) -> None:
     project = generate()
 
     content = (project / ".github" / "workflows" / "ci.yml").read_text()
 
-    assert "run: make lint" in content
-    assert "run: make test" in content
     assert "run: make build" in content
 
 

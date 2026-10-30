@@ -20,14 +20,5 @@ jobs:
         with:
           enable-cache: true
 
-      - name: Install dependencies
-        run: make install-deps
-
-      - name: Run linters
-        run: make lint
-
-      - name: Run tests
-        run: make test
-
       - name: Build source distribution
         run: make build
