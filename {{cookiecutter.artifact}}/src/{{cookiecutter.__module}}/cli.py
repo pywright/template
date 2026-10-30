@@ -38,6 +38,8 @@ def cli(verbose: bool) -> None:
     """Entry point for {{cookiecutter.artifact}} CLI."""
     configure_logger(logging.DEBUG if verbose else logging.INFO)
 
+    click.echo("{{ cookiecutter.artifact }} is ready.")
+
 
 if __name__ == "__main__":
     cli()
