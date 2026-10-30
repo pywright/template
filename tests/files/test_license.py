@@ -16,10 +16,6 @@ LICENSES = {
         "BSD 3-Clause License",
         "OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.",
     ),
-    "GPL-3.0": (
-        "GNU GENERAL PUBLIC LICENSE",
-        "<https://www.gnu.org/licenses/why-not-lgpl.html>.",
-    ),
 }
 
 # Licenses whose text carries a year and holder; the rest are used verbatim.
