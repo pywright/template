@@ -37,6 +37,12 @@ def test_whenVersionIsSet_expectProjectVersion(generate: Generate) -> None:
     assert data["project"]["version"] == "7.7.7"
 
 
+def test_whenPythonIsSet_expectRequiresPython(generate: Generate) -> None:
+    data = load(generate(__python="3.99"))
+
+    assert data["project"]["requires-python"] == ">=3.99"
+
+
 def test_whenAuthorIsSet_expectAuthorsEntry(generate: Generate) -> None:
     data = load(generate(__author=AUTHOR, __email=EMAIL))
 
