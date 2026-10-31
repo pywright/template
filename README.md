@@ -1,4 +1,4 @@
-# Template
+# template
 
 Skip the setup. Start building. 🚀
 
