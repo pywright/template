@@ -24,6 +24,11 @@ def choices() -> dict[str, list[str]]:
     }
 
 
+def deb_packagings() -> list[str]:
+    """Packaging choices that build a Debian package."""
+    return [p for p in choices()["packaging"] if p.startswith("debian-")]
+
+
 def matrix() -> list[dict[str, str]]:
     """Every combination of the choice variables."""
     options = choices()
