@@ -1,7 +1,7 @@
 import pytest
 from pytest_cookies.plugin import Cookies
 
-DEB_DIRECTORIES = ("debian",)
+DEB_DIRECTORIES = ("debian", "packaging")
 
 
 def test_whenProjectIsGenerated_expectGitRepositoryInitialized(
