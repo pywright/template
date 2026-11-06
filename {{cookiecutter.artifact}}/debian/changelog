@@ -1,0 +1,5 @@
+{{ cookiecutter.artifact }} ({{ cookiecutter.__version }}) UNRELEASED; urgency=medium
+
+  * Initial release.
+
+ -- {{ cookiecutter.__author }} <{{ cookiecutter.__email }}>  {% now 'utc', '%a, %d %b %Y %H:%M:%S %z' %}

@@ -1,0 +1,1 @@
+pkg/{{ cookiecutter.artifact }} usr/bin
