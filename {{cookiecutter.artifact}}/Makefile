@@ -11,9 +11,30 @@ SHELL := /bin/bash
 MAKEFLAGS += --warn-undefined-variables
 MAKEFLAGS += --no-builtin-rules
 
-ARTIFACT := {{ cookiecutter.artifact }}
-
 ARGS ?=
+
+ARTIFACT := {{ cookiecutter.artifact }}
+{%- if cookiecutter.__packaging == 'debian' %}
+MODULE := {{ cookiecutter.__module }}
+
+ARCH ?= {{ cookiecutter.__arch }}
+CODENAME := {{ cookiecutter.__codename }}
+IMAGE = $(ARTIFACT)-deb:$(CODENAME)-$(ARCH)
+CONTAINER_HOME = $(HOME)/.cache/$(ARTIFACT)-deb/$(CODENAME)-$(ARCH)
+
+DEBFULLNAME ?= $(shell git config user.name)
+DEBEMAIL ?= $(shell git config user.email)
+
+DOCKER_RUN = docker run --rm --interactive \
+	$$(test -t 0 && echo --tty) \
+	--platform linux/$(ARCH) \
+	--env UV_PROJECT_ENVIRONMENT=/home/ubuntu/venv \
+	--env DEBFULLNAME="$(DEBFULLNAME)" \
+	--env DEBEMAIL="$(DEBEMAIL)" \
+	--volume "$(CONTAINER_HOME):/home/ubuntu" \
+	--volume "$$PWD:/home/ubuntu/app" \
+	$(IMAGE)
+{%- endif %}
 
 # ---------------------------------------- HELP ----------------------------------------
 
@@ -68,6 +89,50 @@ git-clean: ## Clean the project using git clean
 
 # --------------------------------------- BUILD ----------------------------------------
 
+{%- if cookiecutter.__packaging == 'python' %}
+
 .PHONY: build
 build: install-deps lint test  ## Build source distribution and wheel
 	uv build
+{%- elif cookiecutter.__packaging == 'debian' %}
+
+.PHONY: image
+image: ## Build the image
+	docker build . \
+		--platform linux/$(ARCH) \
+		--build-arg CODENAME=$(CODENAME) \
+		--build-arg USER_UID=$$(id -u) \
+		--build-arg USER_GID=$$(id -g) \
+		--file packaging/deb.Dockerfile \
+		--tag $(IMAGE)
+
+.PHONY: shell
+shell: image  ## Open a shell in the image
+	mkdir -p "$(CONTAINER_HOME)"
+	$(DOCKER_RUN) bash
+
+.PHONY: pyinstaller
+pyinstaller: install-deps lint test  ## Create a binary executable using pyinstaller
+	uv run --group deb pyinstaller \
+		--onefile \
+		--clean \
+		--noconfirm \
+		--name $(ARTIFACT) \
+		--copy-metadata $(ARTIFACT) \
+		--distpath pkg \
+		src/$(MODULE)/cli.py
+
+.PHONY: pkg
+pkg: pyinstaller  ## Build the Debian package
+	debuild --no-lintian -us -uc -b
+	debuild -- clean
+	mkdir -p dist
+	mv ../$(ARTIFACT)_*.deb dist/
+	rm -f ../$(ARTIFACT)_*
+	cd dist && for deb in *.deb; do sha256sum "$$deb" > "$$deb.sha256"; done
+
+.PHONY: build
+build: image  ## Build the Debian package in the image
+	mkdir -p "$(CONTAINER_HOME)"
+	$(DOCKER_RUN) make pkg
+{%- endif %}

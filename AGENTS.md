@@ -71,6 +71,9 @@ Already implemented; reuse them, do not reimplement them.
 
 `EXPECTED_FILES` in `tests/files/test_rendered.py` is the single list of paths
 every generated project must contain (`{module}` stands for the package name).
+Paths generated only for one option value get their own list next to it (e.g.
+`DEB_FILES` for `debian` packaging), and the hook that removes them otherwise is
+tested in `tests/hooks/`.
 
 - Per-file modules do not assert that their file exists; reading it fails if it
   does not.
@@ -130,10 +133,10 @@ Rules:
 ## 4. Build tests
 
 For **any** valid combination of parameters, the generated project passes
-`make build`.
+`make build`, the command CI runs.
 
-- **The matrix is derived from `cookiecutter.json`** (`matrix()`), never
-  hardcoded. Adding a new option or choice must automatically add build cases.
+- **The cases are derived from `cookiecutter.json`** (`choices()`, `matrix()`),
+  never hardcoded. Adding a new option or choice must automatically add build cases.
   Do not filter combinations out; if one is invalid, forbid it in the
   `pre_gen_project` hook so it fails at generation instead.
 - **Run the real command**: `make build` in the generated project, no mocks
@@ -142,6 +145,7 @@ For **any** valid combination of parameters, the generated project passes
   message.
 - **Skips must be explicit and justified** (e.g. a choice that needs an
   external tool missing locally). CI must run every case with no skips.
+- **Docker is required**: the `debian` cases fail without it, they do not skip.
 
 ## Out of scope
 
