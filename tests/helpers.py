@@ -5,10 +5,6 @@ from typing import Any, Protocol
 
 COOKIECUTTER_JSON = Path(__file__).parent.parent / "cookiecutter.json"
 
-# Identity returned by the isolated git config (see the `gitconfig` fixture).
-AUTHOR = "Jane Doe"
-EMAIL = "jane.doe@example.com"
-
 
 class Generate(Protocol):
     def __call__(self, **context: str) -> Path: ...

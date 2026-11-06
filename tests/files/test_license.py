@@ -2,7 +2,7 @@ from datetime import datetime
 
 import pytest
 
-from tests.helpers import AUTHOR, Generate, choices
+from tests.helpers import Generate, choices
 
 # license -> (first line, last line); guards against wrong or truncated text.
 LICENSES = {
@@ -58,21 +58,21 @@ def test_whenLicenseIsSet_expectOnlyThatLicenseFile(
 def test_whenLicenseHasCopyrightLine_expectCurrentYearAndAuthor(
     generate: Generate, license: str
 ) -> None:
-    project = generate(license=license, __author=AUTHOR)
+    project = generate(license=license, __author="Jane Doe")
 
     lines = [line.strip() for line in (project / "LICENSE").read_text().splitlines()]
 
     year = datetime.now().year
-    assert COPYRIGHT_LINES[license].format(year=year, author=AUTHOR) in lines
+    assert COPYRIGHT_LINES[license].format(year=year, author="Jane Doe") in lines
 
 
 @pytest.mark.parametrize("license", VERBATIM)
 def test_whenLicenseIsVerbatim_expectAuthorNotInjected(
     generate: Generate, license: str
 ) -> None:
-    text = (generate(license=license, __author=AUTHOR) / "LICENSE").read_text()
+    text = (generate(license=license, __author="Jane Doe") / "LICENSE").read_text()
 
-    assert AUTHOR not in text
+    assert "Jane Doe" not in text
 
 
 @pytest.mark.parametrize("license", COPYRIGHT_LINES)
