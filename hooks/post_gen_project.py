@@ -6,7 +6,7 @@ from pathlib import Path
 PACKAGING = "{{ cookiecutter.__packaging }}"
 
 if PACKAGING != "debian":
-    for path in ("debian",):
+    for path in ("debian", "packaging"):
         shutil.rmtree(Path(path))
 
 try:

@@ -34,6 +34,7 @@ DEB_FILES = (
     "debian/install",
     "debian/rules",
     "debian/source/format",
+    "packaging/deb.Dockerfile",
 )
 
 LEFTOVERS = ("{{", "{%", "cookiecutter.")
