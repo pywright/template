@@ -1,6 +1,6 @@
 import pytest
 
-from tests.helpers import AUTHOR, EMAIL, Render
+from tests.helpers import Render
 
 
 def test_whenDefaultsAreUsed_expectTitleAndDescriptionUnchanged(
@@ -61,5 +61,5 @@ def test_whenArtifactIsSet_expectModuleWithUnderscores(
 def test_whenGitConfigIsSet_expectAuthorAndEmailFromGit(render: Render) -> None:
     context = render()
 
-    assert context["__author"] == AUTHOR
-    assert context["__email"] == EMAIL
+    assert context["__author"] == "Jane Doe"
+    assert context["__email"] == "jane.doe@example.com"

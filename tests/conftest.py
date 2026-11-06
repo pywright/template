@@ -8,7 +8,7 @@ from cookiecutter.generate import generate_context
 from cookiecutter.prompt import prompt_for_config
 from pytest_cookies.plugin import Cookies
 
-from tests.helpers import AUTHOR, COOKIECUTTER_JSON, EMAIL, Generate, Render
+from tests.helpers import COOKIECUTTER_JSON, Generate, Render
 
 
 def pytest_configure(config: pytest.Config) -> None:
@@ -20,7 +20,7 @@ def pytest_configure(config: pytest.Config) -> None:
 @pytest.fixture(autouse=True)
 def gitconfig(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
     path = tmp_path / "gitconfig"
-    path.write_text(f"[user]\n\tname = {AUTHOR}\n\temail = {EMAIL}\n")
+    path.write_text("[user]\n\tname = Jane Doe\n\temail = jane.doe@example.com\n")
     monkeypatch.setenv("GIT_CONFIG_GLOBAL", str(path))
     monkeypatch.setenv("GIT_CONFIG_NOSYSTEM", "1")
     return path

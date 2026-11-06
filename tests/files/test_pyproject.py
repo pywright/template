@@ -4,7 +4,7 @@ from typing import Any
 
 import pytest
 
-from tests.helpers import AUTHOR, EMAIL, Generate, choices
+from tests.helpers import Generate, choices
 
 
 def load(project: Path) -> dict[str, Any]:
@@ -50,9 +50,11 @@ def test_whenPythonIsSet_expectRequiresPython(generate: Generate) -> None:
 
 
 def test_whenAuthorIsSet_expectAuthorsEntry(generate: Generate) -> None:
-    data = load(generate(__author=AUTHOR, __email=EMAIL))
+    data = load(generate(__author="Jane Doe", __email="jane.doe@example.com"))
 
-    assert data["project"]["authors"] == [{"name": AUTHOR, "email": EMAIL}]
+    assert data["project"]["authors"] == [
+        {"name": "Jane Doe", "email": "jane.doe@example.com"}
+    ]
 
 
 @pytest.mark.parametrize("license", choices()["license"])

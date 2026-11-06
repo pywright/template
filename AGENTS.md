@@ -21,7 +21,7 @@ replaces the other.
 ```
 tests/
   conftest.py            # generate and render fixtures
-  helpers.py             # choices(), matrix(), case_id(), AUTHOR, EMAIL
+  helpers.py             # choices(), matrix(), case_id()
   files/
     test_rendered.py     # expected files exist, no unrendered syntax
     test_<file>.py       # per-file content tests (only where needed)
@@ -49,7 +49,6 @@ tests/
   - Use `whenProjectIsGenerated` only when nothing varies.
   - Parametrized values never appear in the name.
 - Annotate every test: fixtures with `Generate` / `Render`, return `-> None`.
-- Shared constants (`AUTHOR`, `EMAIL`) live in `tests/helpers.py`.
 - Ruff ignores `D`, `PL`, `S` in tests; no docstrings required.
 
 ## Fixtures and helpers
@@ -106,7 +105,7 @@ Rules:
 - **Generate once per case**, read only the file under test.
 - **Pass every variable you assert on explicitly**, using the exact names in
   `cookiecutter.json`. This works for private variables too (e.g.
-  `generate(__author=AUTHOR)`), so never rely on defaults or the machine's
+  `generate(__author="Jane Doe")`), so never rely on defaults or the machine's
   git config.
 - **Use distinctive values** so a match can't be a coincidence with a default.
 - **Assert specific lines or fragments**, not whole-file snapshots. Snapshots
