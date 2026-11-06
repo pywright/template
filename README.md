@@ -33,7 +33,7 @@ Three ways to ship. Pick the one that fits your project:
 </details>
 
 <details>
-<summary><b>[WIP] Debian package (.deb)</b>: installs like any other app on Debian and Ubuntu</summary>
+<summary><b>Debian package (.deb)</b>: installs like any other app on Debian and Ubuntu</summary>
 
 <br>
 

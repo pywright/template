@@ -1,6 +1,6 @@
 import pytest
 
-from tests.helpers import Render
+from tests.helpers import Render, deb_packagings
 
 
 def test_whenDefaultsAreUsed_expectTitleAndDescriptionUnchanged(
@@ -63,3 +63,53 @@ def test_whenGitConfigIsSet_expectAuthorAndEmailFromGit(render: Render) -> None:
 
     assert context["__author"] == "Jane Doe"
     assert context["__email"] == "jane.doe@example.com"
+
+
+@pytest.mark.parametrize(
+    ("packaging", "kind", "codename", "arch"),
+    [
+        ("debian-jammy-amd64", "debian", "jammy", "amd64"),
+        ("debian-resolute-arm64", "debian", "resolute", "arm64"),
+        ("python", "python", "", ""),
+    ],
+)
+def test_whenPackagingIsSet_expectPackagingCodenameAndArch(
+    render: Render, packaging: str, kind: str, codename: str, arch: str
+) -> None:
+    context = render(packaging=packaging)
+
+    assert context["__packaging"] == kind
+    assert context["__codename"] == codename
+    assert context["__arch"] == arch
+
+
+@pytest.mark.parametrize("packaging", deb_packagings())
+def test_whenPackagingIsDeb_expectCodenameAndArchFromChoice(
+    render: Render, packaging: str
+) -> None:
+    context = render(packaging=packaging)
+
+    assert context["__packaging"] == "debian"
+    assert packaging == f"debian-{context['__codename']}-{context['__arch']}"
+
+
+@pytest.mark.parametrize(
+    ("packaging", "expected"),
+    [
+        ("debian-jammy-amd64", "4.6.0"),
+        ("debian-noble-arm64", "4.7.0"),
+        ("debian-resolute-amd64", "4.7.4"),
+        ("python", ""),
+    ],
+)
+def test_whenPackagingIsSet_expectStandardsVersion(
+    render: Render, packaging: str, expected: str
+) -> None:
+    assert render(packaging=packaging)["__standards"] == expected
+
+
+@pytest.mark.parametrize("packaging", deb_packagings())
+def test_whenPackagingIsDeb_expectEveryCodenameHasStandards(
+    render: Render, packaging: str
+) -> None:
+    assert render(packaging=packaging)["__standards"]
