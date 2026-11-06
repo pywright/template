@@ -1,0 +1,11 @@
+#!/usr/bin/make -f
+
+%:
+	dh $@
+
+# Skip these steps: make pkg runs lint checks and tests and builds the
+# binary before debuild; debian/install handles installation.
+override_dh_auto_clean:
+override_dh_auto_build:
+override_dh_auto_test:
+override_dh_auto_install:

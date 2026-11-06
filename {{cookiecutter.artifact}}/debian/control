@@ -1,0 +1,13 @@
+Source: {{ cookiecutter.artifact }}
+Section: utils
+Priority: optional
+Maintainer: {{ cookiecutter.__author }} <{{ cookiecutter.__email }}>
+Build-Depends: debhelper-compat (= {{ cookiecutter.__debhelper }})
+Standards-Version: {{ cookiecutter.__standards }}
+Rules-Requires-Root: no
+
+Package: {{ cookiecutter.artifact }}
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: {{ cookiecutter.__title }}
+ {{ cookiecutter.__description | wordwrap(78) | indent(1) }}

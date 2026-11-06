@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from tests.helpers import Generate, case_id, matrix
+from tests.helpers import Generate, Render, case_id, matrix
 
 ARTIFACT = "distinctive-artifact"
 MODULE = "distinctive_artifact"
@@ -24,6 +24,16 @@ EXPECTED_FILES = (
     "src/{module}/py.typed",
     "tests/{module}/conftest.py",
     "tests/{module}/test_cli.py",
+)
+
+# Generated only for `debian` packaging.
+DEB_FILES = (
+    "debian/changelog",
+    "debian/control",
+    "debian/copyright",
+    "debian/install",
+    "debian/rules",
+    "debian/source/format",
 )
 
 LEFTOVERS = ("{{", "{%", "cookiecutter.")
@@ -63,13 +73,16 @@ def test_whenProjectIsGenerated_expectNoUnrenderedSyntaxInAnyFile(
 
 @pytest.mark.parametrize("context", matrix(), ids=case_id)
 def test_whenProjectIsGenerated_expectEveryExpectedFileExists(
-    generate: Generate, context: dict[str, str]
+    generate: Generate, render: Render, context: dict[str, str]
 ) -> None:
     project = generate(**context, artifact=ARTIFACT)
 
+    expected = EXPECTED_FILES + (
+        DEB_FILES if render(**context)["__packaging"] == "debian" else ()
+    )
     missing = [
         path
-        for path in (template.format(module=MODULE) for template in EXPECTED_FILES)
+        for path in (template.format(module=MODULE) for template in expected)
         if not (project / path).is_file()
     ]
 
