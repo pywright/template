@@ -17,6 +17,23 @@ def test_whenProjectIsGenerated_expectUvBuildBackend(generate: Generate) -> None
     assert data["build-system"]["build-backend"] == "uv_build"
 
 
+def test_whenPackagingIsDeb_expectPyinstallerInDebGroup(
+    generate: Generate,
+) -> None:
+    data = load(generate(packaging="debian-jammy-arm64"))
+
+    assert any(
+        dependency.startswith("pyinstaller ")
+        for dependency in data["dependency-groups"]["deb"]
+    )
+
+
+def test_whenPackagingIsPython_expectNoDebGroup(generate: Generate) -> None:
+    data = load(generate(packaging="python"))
+
+    assert "deb" not in data["dependency-groups"]
+
+
 def test_whenArtifactIsSet_expectProjectName(generate: Generate) -> None:
     data = load(generate(artifact="my-cool-app"))
 

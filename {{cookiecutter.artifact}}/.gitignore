@@ -25,10 +25,18 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+{%- if cookiecutter.__packaging == 'debian' %}
+pkg/
+debian/*/
+!debian/source/
+debian/*debhelper*
+debian/*.substvars
+debian/files
 
 # PyInstaller
 *.manifest
 *.spec
+{%- endif %}
 
 # Installer logs
 pip-log.txt

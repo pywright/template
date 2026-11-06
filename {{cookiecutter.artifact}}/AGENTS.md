@@ -8,6 +8,13 @@ changing code.
 - `make run ARGS="..."`: run the CLI.
 - `make lint`: lint and type-check.
 - `make test`: run the tests.
+{%- if cookiecutter.__packaging == 'python' %}
+- `make build`: build the source distribution and wheel.
+{%- elif cookiecutter.__packaging == 'debian' %}
+- `make build`: build the Debian package (needs Docker).
+- `make shell`: open a shell in the image that builds it.
+- `make pkg`: build the Debian package, inside `make shell`.
+{%- endif %}
 
 Run `make lint` and `make test` before finishing a change.
 

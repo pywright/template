@@ -1,8 +1,8 @@
 from pathlib import Path
 
-from tests.helpers import Generate
+import pytest
 
-ARTIFACT = "my-cli"
+from tests.helpers import Generate
 
 
 def read_makefile(project: Path) -> str:
@@ -10,14 +10,58 @@ def read_makefile(project: Path) -> str:
 
 
 def test_whenArtifactIsSet_expectArtifactVariableRendered(generate: Generate) -> None:
-    project = generate(artifact=ARTIFACT)
+    lines = read_makefile(generate(artifact="distinctive-artifact")).splitlines()
 
-    assert f"ARTIFACT := {ARTIFACT}" in read_makefile(project).splitlines()
+    assert "ARTIFACT := distinctive-artifact" in lines
 
 
-def test_whenArtifactIsSet_expectRunTargetUsesArtifactVariable(
+def test_whenCodenameAndArchAreSet_expectVariablesRendered(
     generate: Generate,
 ) -> None:
-    project = generate(artifact=ARTIFACT)
+    lines = read_makefile(
+        generate(
+            packaging="debian-jammy-arm64",
+            __codename="distinctive-codename",
+            __arch="distinctive-arch",
+            __standards="distinctive-standards",
+        )
+    ).splitlines()
 
-    assert "\tuv run $(ARTIFACT) ${ARGS}" in read_makefile(project)
+    assert "CODENAME := distinctive-codename" in lines
+    assert "ARCH ?= distinctive-arch" in lines
+
+
+def test_whenModuleIsSet_expectModuleVariableRendered(generate: Generate) -> None:
+    lines = read_makefile(
+        generate(packaging="debian-jammy-arm64", __module="distinctive_module")
+    ).splitlines()
+
+    assert "MODULE := distinctive_module" in lines
+
+
+@pytest.mark.parametrize("target", ["image", "shell", "pyinstaller", "pkg", "build"])
+def test_whenPackagingIsDeb_expectTargetExists(generate: Generate, target: str) -> None:
+    lines = read_makefile(generate(packaging="debian-jammy-arm64")).splitlines()
+
+    assert any(line.startswith(f"{target}:") for line in lines)
+
+
+def test_whenPackagingIsDeb_expectNoUvBuild(generate: Generate) -> None:
+    text = read_makefile(generate(packaging="debian-jammy-arm64"))
+
+    assert "uv build" not in text
+
+
+def test_whenPackagingIsPython_expectBuildTargetRunsUvBuild(
+    generate: Generate,
+) -> None:
+    lines = read_makefile(generate(packaging="python")).splitlines()
+
+    assert "\tuv build" in lines
+
+
+def test_whenPackagingIsPython_expectNoDebTarget(generate: Generate) -> None:
+    text = read_makefile(generate(packaging="python"))
+
+    assert "deb" not in text
+    assert "CODENAME" not in text
