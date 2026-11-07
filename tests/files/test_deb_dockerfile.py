@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from tests.helpers import Generate, deb_packagings
+from tests.helpers import Generate, debian_packagings
 
 # Ubuntu images without an `ubuntu` user.
 CODENAMES_WITHOUT_USER = {"jammy"}
@@ -44,7 +44,7 @@ def test_whenProjectIsGenerated_expectBuildToolsInstalled(generate: Generate) ->
     assert "        git \\" in lines
 
 
-@pytest.mark.parametrize("packaging", deb_packagings())
+@pytest.mark.parametrize("packaging", debian_packagings())
 def test_whenCodenameIsSet_expectUbuntuUserMatchesImage(
     generate: Generate, packaging: str
 ) -> None:

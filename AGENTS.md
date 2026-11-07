@@ -21,7 +21,7 @@ replaces the other.
 ```
 tests/
   conftest.py            # generate and render fixtures
-  helpers.py             # choices(), matrix(), case_id()
+  helpers.py             # choices(), debian_packagings(), matrix(), case_id()
   files/
     test_rendered.py     # expected files exist, no unrendered syntax
     test_<file>.py       # per-file content tests (only where needed)
@@ -63,16 +63,17 @@ Already implemented; reuse them, do not reimplement them.
 - **`gitconfig` fixture** (`tests/conftest.py`, autouse): isolates tests from
   the machine's git config. Do not remove it.
 - **`build` marker**: registered in `tests/conftest.py`.
-- **`choices()` / `matrix()` / `case_id()`** (`tests/helpers.py`): the choice
-  variables, every combination of them (both derived from `cookiecutter.json`)
-  and a readable pytest id for a combination.
+- **`choices()` / `debian_packagings()` / `matrix()` / `case_id()`**
+  (`tests/helpers.py`): the choice variables, the `packaging` choices that build
+  a Debian package, every combination of the choices (all derived from
+  `cookiecutter.json`) and a readable pytest id for a combination.
 
 ## 1. File existence
 
 `EXPECTED_FILES` in `tests/files/test_rendered.py` is the single list of paths
 every generated project must contain (`{module}` stands for the package name).
 Paths generated only for one option value get their own list next to it (e.g.
-`DEB_FILES` for `debian` packaging), and the hook that removes them otherwise is
+`DEBIAN_FILES` for `debian` packaging), and the hook that removes them otherwise is
 tested in `tests/hooks/`.
 
 - Per-file modules do not assert that their file exists; reading it fails if it

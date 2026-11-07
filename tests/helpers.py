@@ -24,7 +24,7 @@ def choices() -> dict[str, list[str]]:
     }
 
 
-def deb_packagings() -> list[str]:
+def debian_packagings() -> list[str]:
     """Packaging choices that build a Debian package."""
     return [p for p in choices()["packaging"] if p.startswith("debian-")]
 

@@ -22,7 +22,7 @@
   "__module": "{{ cookiecutter.artifact | replace('-', '_') }}",
   "__title": "{{ ' '.join(cookiecutter.title.split()).removesuffix('.').rstrip() }}",
   "__description": "{% set d = ' '.join(cookiecutter.description.split()) %}{{ d if not d or d[-1] in '.!?' else d ~ '.' }}",
-  "__packaging": "{{ cookiecutter.packaging.split('-')[0]}}",
+  "__packaging": "{{ cookiecutter.packaging.split('-')[0] }}",
   "__codename": "{{ cookiecutter.packaging.split('-')[1] if cookiecutter.packaging.startswith('debian-') else '' }}",
   "__arch": "{{ cookiecutter.packaging.split('-')[2] if cookiecutter.packaging.startswith('debian-') else '' }}",
   "__debhelper": "13",

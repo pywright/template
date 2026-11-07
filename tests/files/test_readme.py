@@ -23,7 +23,7 @@ def test_whenTitleAndDescriptionAreSet_expectReadmeHeadingAndDescription(
     assert "Distinctive project description for this test." in content
 
 
-def test_whenPackagingIsDeb_expectDebSectionWithTargetRendered(
+def test_whenPackagingIsDebian_expectDebianSectionWithTargetRendered(
     generate: Generate,
 ) -> None:
     project = generate(
@@ -38,7 +38,9 @@ def test_whenPackagingIsDeb_expectDebSectionWithTargetRendered(
     assert "`.deb` for Ubuntu distinctive-codename, distinctive-arch" in content
 
 
-def test_whenPackagingIsDeb_expectDockerRequirementsListed(generate: Generate) -> None:
+def test_whenPackagingIsDebian_expectDockerRequirementsListed(
+    generate: Generate,
+) -> None:
     content = read_readme(generate(packaging="debian-jammy-arm64"))
 
     assert "https://docs.docker.com/engine/install/)" in content
@@ -51,7 +53,7 @@ def test_whenPackagingIsPython_expectBuildOutputDescribed(generate: Generate) ->
     assert "source distribution and wheel" in content
 
 
-def test_whenPackagingIsPython_expectNoDebSection(generate: Generate) -> None:
+def test_whenPackagingIsPython_expectNoDebianSection(generate: Generate) -> None:
     content = read_readme(generate(packaging="python"))
 
     assert ".deb" not in content

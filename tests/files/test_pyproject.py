@@ -17,7 +17,7 @@ def test_whenProjectIsGenerated_expectUvBuildBackend(generate: Generate) -> None
     assert data["build-system"]["build-backend"] == "uv_build"
 
 
-def test_whenPackagingIsDeb_expectPyinstallerInDebGroup(
+def test_whenPackagingIsDebian_expectPyinstallerInDebianGroup(
     generate: Generate,
 ) -> None:
     data = load(generate(packaging="debian-jammy-arm64"))
@@ -28,7 +28,7 @@ def test_whenPackagingIsDeb_expectPyinstallerInDebGroup(
     )
 
 
-def test_whenPackagingIsPython_expectNoDebGroup(generate: Generate) -> None:
+def test_whenPackagingIsPython_expectNoDebianGroup(generate: Generate) -> None:
     data = load(generate(packaging="python"))
 
     assert "deb" not in data["dependency-groups"]

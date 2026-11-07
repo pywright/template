@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from tests.helpers import Generate, Render, deb_packagings
+from tests.helpers import Generate, Render, debian_packagings
 
 # __arch -> GitHub runner that builds natively for it
 RUNNERS = {"amd64": "ubuntu-24.04", "arm64": "ubuntu-24.04-arm"}
@@ -22,14 +22,14 @@ def test_whenPackagingIsSet_expectCiJobRunsMakeBuild(
     assert "        run: make build\n" in content
 
 
-def test_whenPackagingIsPython_expectNoDebSteps(generate: Generate) -> None:
+def test_whenPackagingIsPython_expectNoDebianSteps(generate: Generate) -> None:
     content = read_workflow(generate(packaging="python"), "ci.yml")
 
     assert "deb" not in content
 
 
-@pytest.mark.parametrize("packaging", deb_packagings())
-def test_whenPackagingIsDeb_expectCiJobRunsOnNativeRunner(
+@pytest.mark.parametrize("packaging", debian_packagings())
+def test_whenPackagingIsDebian_expectCiJobRunsOnNativeRunner(
     generate: Generate, render: Render, packaging: str
 ) -> None:
     content = read_workflow(generate(packaging=packaging), "ci.yml")
