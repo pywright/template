@@ -128,7 +128,7 @@ pkg: pyinstaller  ## Build the Debian package
 	debuild -- clean
 	mkdir -p dist
 	mv ../$(ARTIFACT)_*.deb dist/
-	rm -f ../$(ARTIFACT)_*
+	rm -f ../$(ARTIFACT)_*.{build,buildinfo,changes}
 	cd dist && for deb in *.deb; do sha256sum "$$deb" > "$$deb.sha256"; done
 
 .PHONY: build

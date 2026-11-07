@@ -54,6 +54,14 @@ def test_whenPackagingIsDebian_expectNoUvBuild(generate: Generate) -> None:
     assert "uv build" not in text
 
 
+def test_whenPackagingIsDebian_expectPkgRemovesOnlyDebuildFiles(
+    generate: Generate,
+) -> None:
+    lines = read_makefile(generate(packaging="debian-jammy-arm64")).splitlines()
+
+    assert "\trm -f ../$(ARTIFACT)_*.{build,buildinfo,changes}" in lines
+
+
 def test_whenPackagingIsPython_expectBuildTargetRunsUvBuild(
     generate: Generate,
 ) -> None:
