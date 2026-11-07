@@ -1,9 +1,8 @@
 # Image for development and packaging.
 
 ARG CODENAME
-ARG UV_VERSION=0.13.6
 
-FROM ghcr.io/astral-sh/uv:${UV_VERSION} AS uv
+FROM ghcr.io/astral-sh/uv:0.13.6 AS uv
 
 FROM ubuntu:${CODENAME}
 

@@ -19,6 +19,13 @@ def test_whenProjectIsGenerated_expectCodenameRequired(generate: Generate) -> No
     assert "FROM ubuntu:${CODENAME}" in lines
 
 
+def test_whenProjectIsGenerated_expectUvImageTagIsLiteral(generate: Generate) -> None:
+    text = read_dockerfile(generate(packaging="debian-jammy-arm64"))
+
+    assert "FROM ghcr.io/astral-sh/uv:0." in text
+    assert "UV_VERSION" not in text
+
+
 def test_whenProjectIsGenerated_expectBuildDependsInstalledFromControl(
     generate: Generate,
 ) -> None:

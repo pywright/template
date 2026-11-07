@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install syft
-        run: curl -sSfL https://get.anchore.io/syft | sudo sh -s -- -b /usr/local/bin
+        uses: anchore/sbom-action/download-syft@v0.24.3
 
       - name: Generate SBOM
         run: |
@@ -23,7 +23,7 @@ jobs:
           mkdir -p dist/
           syft scan dir:. \
             -o syft-json=dist/"${NAME}"_syft.json \
-            -o cyclonedx-json@1.6=dist/"${NAME}"_cyclonedx.json \
+            -o cyclonedx-json=dist/"${NAME}"_cyclonedx.json \
             --source-name="${NAME}"
 
       - name: Upload SBOM
