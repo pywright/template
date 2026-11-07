@@ -1,5 +1,7 @@
 from pathlib import Path
 
+import pytest
+
 from tests.helpers import Generate
 
 
@@ -54,3 +56,12 @@ def test_whenPackagingIsPython_expectNoDebSection(generate: Generate) -> None:
 
     assert ".deb" not in content
     assert "Docker" not in content
+
+
+@pytest.mark.parametrize("packaging", ["python", "debian-jammy-arm64"])
+def test_whenPackagingIsSet_expectReleaseStepsDescribed(
+    generate: Generate, packaging: str
+) -> None:
+    content = read_readme(generate(packaging=packaging))
+
+    assert "## Releasing\n\nPush a `v*` tag" in content

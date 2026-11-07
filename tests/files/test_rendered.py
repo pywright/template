@@ -11,6 +11,7 @@ EXPECTED_FILES = (
     ".editorconfig",
     "AGENTS.md",
     ".github/workflows/ci.yml",
+    ".github/workflows/release.yml",
     ".github/workflows/sbom.yml",
     ".gitignore",
     ".pre-commit-config.yaml",
@@ -39,7 +40,7 @@ DEB_FILES = (
 
 LEFTOVERS = ("{{", "{%", "cookiecutter.")
 ALLOWED_EXCEPTIONS = {
-    ".github/workflows/sbom.yml": ("${{ github.token }}",),
+    ".github/workflows/release.yml": ("${{ github.token }}",),
 }
 
 
