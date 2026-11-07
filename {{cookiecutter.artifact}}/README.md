@@ -24,3 +24,7 @@ Requirements:
   [buildx](https://github.com/docker/buildx) and
   [QEMU](https://docs.docker.com/build/building/multi-platform/)
 {%- endif %}
+
+## Releasing
+
+Push a `v*` tag to create a GitHub release with the build output and an SBOM.

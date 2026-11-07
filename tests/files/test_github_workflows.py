@@ -8,22 +8,22 @@ from tests.helpers import Generate, Render, deb_packagings
 RUNNERS = {"amd64": "ubuntu-24.04", "arm64": "ubuntu-24.04-arm"}
 
 
-def read_ci(project: Path) -> str:
-    return (project / ".github" / "workflows" / "ci.yml").read_text()
+def read_workflow(project: Path, name: str) -> str:
+    return (project / ".github" / "workflows" / name).read_text()
 
 
 @pytest.mark.parametrize("packaging", ["python", "debian-jammy-arm64"])
 def test_whenPackagingIsSet_expectCiJobRunsMakeBuild(
     generate: Generate, packaging: str
 ) -> None:
-    content = read_ci(generate(packaging=packaging))
+    content = read_workflow(generate(packaging=packaging), "ci.yml")
 
     assert "  ci:\n" in content
     assert "        run: make build\n" in content
 
 
 def test_whenPackagingIsPython_expectNoDebSteps(generate: Generate) -> None:
-    content = read_ci(generate(packaging="python"))
+    content = read_workflow(generate(packaging="python"), "ci.yml")
 
     assert "deb" not in content
 
@@ -32,7 +32,7 @@ def test_whenPackagingIsPython_expectNoDebSteps(generate: Generate) -> None:
 def test_whenPackagingIsDeb_expectCiJobRunsOnNativeRunner(
     generate: Generate, render: Render, packaging: str
 ) -> None:
-    content = read_ci(generate(packaging=packaging))
+    content = read_workflow(generate(packaging=packaging), "ci.yml")
 
     runner = RUNNERS[render(packaging=packaging)["__arch"]]
     assert f"  ci:\n    runs-on: {runner}\n" in content
@@ -41,13 +41,14 @@ def test_whenPackagingIsDeb_expectCiJobRunsOnNativeRunner(
 def test_whenCodenameAndArchAreSet_expectPackageAndChecksumUploaded(
     generate: Generate,
 ) -> None:
-    content = read_ci(
+    content = read_workflow(
         generate(
             packaging="debian-jammy-arm64",
             __codename="distinctive-codename",
             __arch="distinctive-arch",
             __standards="distinctive-standards",
-        )
+        ),
+        "ci.yml",
     )
 
     assert "          name: deb-distinctive-codename-distinctive-arch\n" in content
@@ -55,19 +56,30 @@ def test_whenCodenameAndArchAreSet_expectPackageAndChecksumUploaded(
     assert "            dist/*.deb.sha256\n" in content
 
 
-def test_whenProjectIsGenerated_expectCiWorkflowTokenIsReadOnly(
+def test_whenPackagingIsPython_expectDistributionsUploaded(
     generate: Generate,
 ) -> None:
-    content = read_ci(generate())
+    content = read_workflow(generate(packaging="python"), "ci.yml")
 
-    assert "permissions:\n  contents: read\n" in content
+    assert "          path: dist/*\n" in content
 
 
-def test_whenProjectIsGenerated_expectSbomWorkflowKeepsGithubTokenExpression(
+@pytest.mark.parametrize("workflow", ["ci.yml", "sbom.yml"])
+def test_whenProjectIsGenerated_expectWorkflowCallableWithReadOnlyToken(
+    generate: Generate, workflow: str
+) -> None:
+    content = read_workflow(generate(), workflow)
+
+    assert "  workflow_call:\n" in content
+    assert "contents: read\n" in content
+    assert "contents: write" not in content
+
+
+def test_whenProjectIsGenerated_expectReleaseCreatedOnVersionTags(
     generate: Generate,
 ) -> None:
-    project = generate()
+    content = read_workflow(generate(), "release.yml")
 
-    content = (project / ".github" / "workflows" / "sbom.yml").read_text()
-
+    assert '      - "v*"\n' in content
     assert "GH_TOKEN: ${{ github.token }}" in content
+    assert 'gh release create "$GITHUB_REF_NAME" dist/* ' in content
