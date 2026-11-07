@@ -75,12 +75,10 @@ def test_whenAuthorIsSet_expectAuthorsEntry(generate: Generate) -> None:
 
 
 @pytest.mark.parametrize("license", choices()["license"])
-def test_whenLicenseIsSet_expectLicenseFileReferenceResolves(
+def test_whenLicenseIsSet_expectLicenseExpressionAndFileRendered(
     generate: Generate, license: str
 ) -> None:
-    project = generate(license=license)
+    data = load(generate(license=license))
 
-    reference = load(project)["project"]["license"]
-
-    assert reference == {"file": "LICENSE"}
-    assert (project / reference["file"]).is_file()
+    assert data["project"]["license"] == license
+    assert data["project"]["license-files"] == ["LICENSE"]

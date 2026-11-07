@@ -2,7 +2,8 @@
 name = "template"
 version = "0.1.0"
 description = "Skip the setup. Start building."
-license = { file = "LICENSE" }
+license = "MIT"
+license-files = ["LICENSE"]
 readme = "README.md"
 
 authors = [

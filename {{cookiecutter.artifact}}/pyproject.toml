@@ -2,7 +2,8 @@
 name = "{{ cookiecutter.artifact }}"
 version = "{{ cookiecutter.__version }}"
 description = "{{ cookiecutter.__title }}"
-license = { file = "LICENSE" }
+license = "{{ cookiecutter.license }}"
+license-files = ["LICENSE"]
 readme = "README.md"
 
 authors = [
