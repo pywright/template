@@ -113,7 +113,7 @@ shell: image  ## Open a shell in the image
 
 .PHONY: pyinstaller
 pyinstaller: install-deps lint test  ## Create a binary executable using pyinstaller
-	uv run --group deb pyinstaller \
+	uv run pyinstaller \
 		--onefile \
 		--clean \
 		--noconfirm \
