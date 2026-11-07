@@ -10,6 +10,7 @@ MODULE = "distinctive_artifact"
 EXPECTED_FILES = (
     ".editorconfig",
     "AGENTS.md",
+    ".github/dependabot.yml",
     ".github/workflows/ci.yml",
     ".github/workflows/release.yml",
     ".github/workflows/sbom.yml",
