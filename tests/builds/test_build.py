@@ -47,8 +47,9 @@ def debian_variables(
     """Make variables that isolate a Debian build from the host."""
     base = tmp_path_factory.getbasetemp()
     return [
-        # Stay out of the home of any real project with the same name.
+        # Stay out of the home and image of any real project with the same name.
         f"CONTAINER_HOME={base / context['packaging']}",
+        f"IMAGE=template-build-test:{context['packaging']}",
         f"DOCKER_CONFIG={docker_config(base)}",
     ]
 
