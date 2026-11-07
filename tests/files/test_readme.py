@@ -23,19 +23,13 @@ def test_whenTitleAndDescriptionAreSet_expectReadmeHeadingAndDescription(
     assert "Distinctive project description for this test." in content
 
 
-def test_whenPackagingIsDebian_expectDebianSectionWithTargetRendered(
+def test_whenPackagingIsDebian_expectBuildOutputAndInstallDescribed(
     generate: Generate,
 ) -> None:
-    project = generate(
-        packaging="debian-jammy-arm64",
-        __codename="distinctive-codename",
-        __arch="distinctive-arch",
-        __standards="distinctive-standards",
-    )
+    content = read_readme(generate(packaging="debian-jammy-arm64"))
 
-    content = read_readme(project)
-
-    assert "`.deb` for Ubuntu distinctive-codename, distinctive-arch" in content
+    assert "`make build` builds the `.deb` in a Docker image" in content
+    assert "sudo apt install ./dist/*.deb\n" in content
 
 
 def test_whenPackagingIsDebian_expectDockerRequirementsListed(
@@ -47,10 +41,13 @@ def test_whenPackagingIsDebian_expectDockerRequirementsListed(
     assert "https://docs.docker.com/engine/install/linux-postinstall/)" in content
 
 
-def test_whenPackagingIsPython_expectBuildOutputDescribed(generate: Generate) -> None:
+def test_whenPackagingIsPython_expectBuildOutputAndInstallDescribed(
+    generate: Generate,
+) -> None:
     content = read_readme(generate(packaging="python"))
 
     assert "source distribution and wheel" in content
+    assert "uv tool install dist/*.whl\n" in content
 
 
 def test_whenPackagingIsPython_expectNoDebianSection(generate: Generate) -> None:
