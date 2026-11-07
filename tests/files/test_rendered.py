@@ -29,7 +29,7 @@ EXPECTED_FILES = (
 )
 
 # Generated only for `debian` packaging.
-DEB_FILES = (
+DEBIAN_FILES = (
     "debian/changelog",
     "debian/control",
     "debian/copyright",
@@ -81,7 +81,7 @@ def test_whenProjectIsGenerated_expectEveryExpectedFileExists(
     project = generate(**context, artifact=ARTIFACT)
 
     expected = EXPECTED_FILES + (
-        DEB_FILES if render(**context)["__packaging"] == "debian" else ()
+        DEBIAN_FILES if render(**context)["__packaging"] == "debian" else ()
     )
     missing = [
         path

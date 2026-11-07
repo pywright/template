@@ -40,13 +40,15 @@ def test_whenModuleIsSet_expectModuleVariableRendered(generate: Generate) -> Non
 
 
 @pytest.mark.parametrize("target", ["image", "shell", "pyinstaller", "pkg", "build"])
-def test_whenPackagingIsDeb_expectTargetExists(generate: Generate, target: str) -> None:
+def test_whenPackagingIsDebian_expectTargetExists(
+    generate: Generate, target: str
+) -> None:
     lines = read_makefile(generate(packaging="debian-jammy-arm64")).splitlines()
 
     assert any(line.startswith(f"{target}:") for line in lines)
 
 
-def test_whenPackagingIsDeb_expectNoUvBuild(generate: Generate) -> None:
+def test_whenPackagingIsDebian_expectNoUvBuild(generate: Generate) -> None:
     text = read_makefile(generate(packaging="debian-jammy-arm64"))
 
     assert "uv build" not in text
@@ -60,7 +62,7 @@ def test_whenPackagingIsPython_expectBuildTargetRunsUvBuild(
     assert "\tuv build" in lines
 
 
-def test_whenPackagingIsPython_expectNoDebTarget(generate: Generate) -> None:
+def test_whenPackagingIsPython_expectNoDebianTarget(generate: Generate) -> None:
     text = read_makefile(generate(packaging="python"))
 
     assert "deb" not in text

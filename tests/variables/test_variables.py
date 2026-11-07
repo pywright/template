@@ -1,6 +1,6 @@
 import pytest
 
-from tests.helpers import Render, deb_packagings
+from tests.helpers import Render, debian_packagings
 
 
 def test_whenDefaultsAreUsed_expectTitleAndDescriptionUnchanged(
@@ -83,8 +83,8 @@ def test_whenPackagingIsSet_expectPackagingCodenameAndArch(
     assert context["__arch"] == arch
 
 
-@pytest.mark.parametrize("packaging", deb_packagings())
-def test_whenPackagingIsDeb_expectCodenameAndArchFromChoice(
+@pytest.mark.parametrize("packaging", debian_packagings())
+def test_whenPackagingIsDebian_expectCodenameAndArchFromChoice(
     render: Render, packaging: str
 ) -> None:
     context = render(packaging=packaging)
@@ -108,8 +108,8 @@ def test_whenPackagingIsSet_expectStandardsVersion(
     assert render(packaging=packaging)["__standards"] == expected
 
 
-@pytest.mark.parametrize("packaging", deb_packagings())
-def test_whenPackagingIsDeb_expectEveryCodenameHasStandards(
+@pytest.mark.parametrize("packaging", debian_packagings())
+def test_whenPackagingIsDebian_expectEveryCodenameHasStandards(
     render: Render, packaging: str
 ) -> None:
     assert render(packaging=packaging)["__standards"]

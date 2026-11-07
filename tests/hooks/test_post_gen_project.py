@@ -1,7 +1,7 @@
 import pytest
 from pytest_cookies.plugin import Cookies
 
-DEB_DIRECTORIES = ("debian", "packaging")
+DEBIAN_DIRECTORIES = ("debian", "packaging")
 
 
 def test_whenProjectIsGenerated_expectGitRepositoryInitialized(
@@ -13,8 +13,8 @@ def test_whenProjectIsGenerated_expectGitRepositoryInitialized(
     assert (result.project_path / ".git").is_dir()
 
 
-@pytest.mark.parametrize("directory", DEB_DIRECTORIES)
-def test_whenPackagingIsPython_expectDebDirectoryRemoved(
+@pytest.mark.parametrize("directory", DEBIAN_DIRECTORIES)
+def test_whenPackagingIsPython_expectDebianDirectoryRemoved(
     cookies: Cookies, directory: str
 ) -> None:
     result = cookies.bake(extra_context={"packaging": "python"})
@@ -24,8 +24,8 @@ def test_whenPackagingIsPython_expectDebDirectoryRemoved(
     assert not (result.project_path / directory).exists()
 
 
-@pytest.mark.parametrize("directory", DEB_DIRECTORIES)
-def test_whenPackagingIsDeb_expectDebDirectoryKept(
+@pytest.mark.parametrize("directory", DEBIAN_DIRECTORIES)
+def test_whenPackagingIsDebian_expectDebianDirectoryKept(
     cookies: Cookies, directory: str
 ) -> None:
     result = cookies.bake(extra_context={"packaging": "debian-jammy-arm64"})
