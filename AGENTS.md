@@ -37,8 +37,10 @@ tests/
 
 - `pytest` + `pytest-cookies` (the `cookies` fixture) for generating
   projects.
-- Run `make test` (all tests) or `make test-fast` (everything except the slow
-  `build` tests).
+- Run `make test` (all tests), `make test-fast` (everything except the slow
+  `build` tests), `make test-amd64` (build tests for amd64 and the Python
+  package) or `make test-arm64` (build tests for arm64). CI runs each build
+  target on a runner of its architecture.
 - Test names: `test_when<Condition>_expect<Outcome>`, camelCase after the
   prefix.
   - `<Condition>` is the input state, written as `<Subject>Is<State>`

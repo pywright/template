@@ -50,13 +50,23 @@ uninstall-pre-commit-hook: ## Uninstall pre-commit hook
 	uv run pre-commit uninstall
 
 .PHONY: test
-test: install-deps  ## Run pytest with coverage
+test: install-deps  ## Run all tests
 	uv run pytest -s -v --cov --cov-report=term-missing \
 		--junit-xml=junit.xml --cov-report=xml:coverage.xml
 
 .PHONY: test-fast
-test-fast: install-deps  ## Run pytest with coverage, skipping slow build tests
+test-fast: install-deps  ## Run all tests except the build tests
 	uv run pytest -s -v -m "not build" --cov --cov-report=term-missing \
+		--junit-xml=junit.xml --cov-report=xml:coverage.xml
+
+.PHONY: test-amd64
+test-amd64: install-deps  ## Run the amd64 and Python build tests
+	uv run pytest -s -v -m build -k "not arm64" --cov --cov-report=term-missing \
+		--junit-xml=junit.xml --cov-report=xml:coverage.xml
+
+.PHONY: test-arm64
+test-arm64: install-deps  ## Run the arm64 build tests
+	uv run pytest -s -v -m build -k arm64 --cov --cov-report=term-missing \
 		--junit-xml=junit.xml --cov-report=xml:coverage.xml
 
 .PHONY: git-clean

@@ -1,5 +1,6 @@
 import functools
 import os
+import platform
 import subprocess
 from pathlib import Path
 
@@ -10,22 +11,26 @@ from tests.helpers import Generate, Render, case_id, variants
 
 TIMEOUT_S = 1800
 BUILDX_PATH = "/usr/local/libexec/docker/cli-plugins/docker-buildx"
+HOST_ARCH = {"x86_64": "amd64", "aarch64": "arm64"}[platform.machine()]
 
 
 @functools.cache
-def docker_config(base: Path) -> Path:
-    """Give the Docker CLI buildx and QEMU, to build for any architecture."""
-    client = docker.from_env(timeout=TIMEOUT_S)
-
-    # QEMU: register binfmt handlers so the host can run foreign-arch binaries.
-    client.containers.run(
+def install_qemu() -> None:
+    """Register binfmt handlers so the host can run foreign-arch binaries."""
+    docker.from_env(timeout=TIMEOUT_S).containers.run(
         "tonistiigi/binfmt",
         "--install arm64,amd64",
         privileged=True,
         remove=True,
     )
 
-    # buildx: copy the plugin out of the official docker:cli image.
+
+@functools.cache
+def docker_config(base: Path) -> Path:
+    """Give the Docker CLI buildx, to build for any architecture."""
+    client = docker.from_env(timeout=TIMEOUT_S)
+
+    # Copy the plugin out of the official docker:cli image.
     config = base / "docker"
     plugins = config / "cli-plugins"
     plugins.mkdir(parents=True)
@@ -42,9 +47,13 @@ def docker_config(base: Path) -> Path:
 
 
 def debian_variables(
-    context: dict[str, str], tmp_path_factory: pytest.TempPathFactory
+    context: dict[str, str], arch: str, tmp_path_factory: pytest.TempPathFactory
 ) -> list[str]:
     """Make variables that isolate a Debian build from the host."""
+    # Emulate only builds for another architecture.
+    if arch != HOST_ARCH:
+        install_qemu()
+
     base = tmp_path_factory.getbasetemp()
     return [
         # Stay out of the home and image of any real project with the same name.
@@ -67,8 +76,9 @@ def test_whenAnyParametersAreChosen_expectBuildPasses(
     subprocess.run(["git", "add", "."], cwd=project, check=True, capture_output=True)
 
     variables = []
-    if render(**context)["__packaging"] == "debian":
-        variables = debian_variables(context, tmp_path_factory)
+    rendered = render(**context)
+    if rendered["__packaging"] == "debian":
+        variables = debian_variables(context, rendered["__arch"], tmp_path_factory)
 
     result = subprocess.run(
         ["make", "build", *variables],
