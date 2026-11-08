@@ -83,3 +83,13 @@ def test_whenProjectIsGenerated_expectReleaseCreatedOnVersionTags(
     assert '      - "v*"\n' in content
     assert "GH_TOKEN: ${{ github.token }}" in content
     assert 'gh release create "$GITHUB_REF_NAME" dist/* ' in content
+
+
+def test_whenProjectIsGenerated_expectReleaseFilesAttested(generate: Generate) -> None:
+    content = read_workflow(generate(), "release.yml")
+
+    assert "      artifact-metadata: write\n" in content
+    assert "      attestations: write\n" in content
+    assert "      id-token: write\n" in content
+    assert "        uses: actions/attest@" in content
+    assert "          subject-path: dist/*\n" in content
