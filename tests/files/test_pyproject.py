@@ -23,7 +23,7 @@ def test_whenPackagingIsDebian_expectPyinstallerInDebianGroup(
     data = load(generate(packaging="debian-jammy-arm64"))
 
     assert any(
-        dependency.startswith("pyinstaller ")
+        dependency.startswith("pyinstaller>=")
         for dependency in data["dependency-groups"]["deb"]
     )
 
