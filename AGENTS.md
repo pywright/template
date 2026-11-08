@@ -156,6 +156,18 @@ build`, the command CI runs.
   external tool missing locally). CI must run every case with no skips.
 - **Docker is required**: the `debian` cases fail without it, they do not skip.
 
+## Workflows
+
+After adding or removing an action in a workflow, update the lockfile next to
+it:
+
+- **Root**: run `gh actions-lock`.
+- **Template**: generate a project for each packaging, run `gh actions-lock`
+  there and copy the result to
+  `{{cookiecutter.artifact}}/.github/workflows/actions.lock`, keeping the Jinja
+  blocks for actions used by one packaging only.
+  `tests/files/test_actions_lock.py` checks the result.
+
 ## Out of scope
 
 - Hooks and extensions: tested separately, not through the
