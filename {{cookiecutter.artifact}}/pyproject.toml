@@ -23,6 +23,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "actionlint-py>=1.7.12.25",
     "mbake>=1.5.0",
     "pre-commit>=4.7.0",
     "pyrefly>=1.4.0",
@@ -31,6 +32,7 @@ dev = [
     "ruff>=0.17.3",
     "shellcheck-py>=0.11.0.1",
     "shfmt-py>=4.2.0",
+    "zizmor>=1.32.0",
 ]
 {%- if cookiecutter.__packaging == 'debian' %}
 deb = [
