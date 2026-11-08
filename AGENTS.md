@@ -8,7 +8,7 @@ all are required:
    variables.
 3. **Per-file tests**: content and rendered variables of a file, only for files
    with something to check beyond existing.
-4. **Build tests**: every valid parameter combination generates a project that
+4. **Build tests**: every option of every choice generates a project that
    passes `make build`.
 
 A full-project test can pass while a single file is wrong (wrong content, stale
@@ -21,13 +21,13 @@ replaces the other.
 ```
 tests/
   conftest.py            # generate and render fixtures
-  helpers.py             # choices(), debian_packagings(), matrix(), case_id()
+  helpers.py             # choices(), debian_packagings(), matrix(), variants(), case_id()
   files/
     test_rendered.py     # expected files exist, no unrendered syntax
     test_<file>.py       # per-file content tests (only where needed)
   variables/
     test_variables.py    # derived cookiecutter.json variables
-  builds/                # build tests over the parameter matrix
+  builds/                # build tests over the parameter variants
     test_build.py
   hooks/                 # hook tests (separate)
   extensions/            # extension tests (separate)
@@ -63,10 +63,11 @@ Already implemented; reuse them, do not reimplement them.
 - **`gitconfig` fixture** (`tests/conftest.py`, autouse): isolates tests from
   the machine's git config. Do not remove it.
 - **`build` marker**: registered in `tests/conftest.py`.
-- **`choices()` / `debian_packagings()` / `matrix()` / `case_id()`**
-  (`tests/helpers.py`): the choice variables, the `packaging` choices that build
-  a Debian package, every combination of the choices (all derived from
-  `cookiecutter.json`) and a readable pytest id for a combination.
+- **`choices()` / `debian_packagings()` / `matrix()` / `variants()` /
+  `case_id()`** (`tests/helpers.py`): the choice variables, the `packaging`
+  choices that build a Debian package, every combination of the choices, the
+  fewest cases that use every option once (all derived from
+  `cookiecutter.json`) and a readable pytest id for a case.
 
 ## 1. File existence
 
@@ -133,13 +134,18 @@ Rules:
 
 ## 4. Build tests
 
-For **any** valid combination of parameters, the generated project passes
-`make build`, the command CI runs.
+For **every** option of every choice, the generated project passes `make
+build`, the command CI runs.
 
-- **The cases are derived from `cookiecutter.json`** (`choices()`, `matrix()`),
-  never hardcoded. Adding a new option or choice must automatically add build cases.
-  Do not filter combinations out; if one is invalid, forbid it in the
-  `pre_gen_project` hook so it fails at generation instead.
+- **The cases are derived from `cookiecutter.json`** (`choices()`,
+  `variants()`), never hardcoded. Adding a new option or choice must
+  automatically add build cases.
+- **Use every option once, not every combination**: builds are slow and every
+  combination grows with the product of the options, while `variants()` grows
+  with the largest one. Content that depends on a combination of options is
+  checked in per-file tests over `matrix()` instead.
+- If a combination is invalid, forbid it in the `pre_gen_project` hook so it
+  fails at generation instead.
 - **Run the real command**: `make build` in the generated project, no mocks
   and no patched Makefile.
 - **Show the output on failure**: include stdout and stderr in the assertion
