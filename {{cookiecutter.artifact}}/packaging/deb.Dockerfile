@@ -1,6 +1,6 @@
 # Image for development and packaging.
 
-ARG CODENAME
+ARG CODENAME={{ cookiecutter.__codename }}
 
 FROM ghcr.io/astral-sh/uv:0.13.6 AS uv
 
