@@ -12,10 +12,13 @@ def read_dockerfile(project: Path) -> str:
     return (project / "packaging/deb.Dockerfile").read_text()
 
 
-def test_whenProjectIsGenerated_expectCodenameRequired(generate: Generate) -> None:
-    lines = read_dockerfile(generate(packaging="debian-jammy-arm64")).splitlines()
+@pytest.mark.parametrize("packaging", debian_packagings())
+def test_whenCodenameIsSet_expectCodenameDefaultRendered(
+    generate: Generate, packaging: str
+) -> None:
+    lines = read_dockerfile(generate(packaging=packaging)).splitlines()
 
-    assert "ARG CODENAME" in lines
+    assert f"ARG CODENAME={packaging.split('-')[1]}" in lines
     assert "FROM ubuntu:${CODENAME}" in lines
 
 
