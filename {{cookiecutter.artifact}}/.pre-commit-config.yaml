@@ -48,3 +48,19 @@ repos:
         entry: uv run --frozen shfmt -w
         language: system
         types: [shell]
+
+      # actionlint does not accept the $/ syntax yet (pywright/template#38).
+      - id: actionlint
+        name: actionlint
+        entry: >-
+          uv run --frozen actionlint -ignore
+          'reusable workflow call "\$/.+" at "uses" is not following the format'
+        language: system
+        files: ^\.github/workflows/.*\.ya?ml$
+
+      - id: zizmor
+        name: zizmor
+        entry: uv run --frozen zizmor .github/
+        language: system
+        files: ^\.github/
+        pass_filenames: false

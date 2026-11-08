@@ -114,6 +114,8 @@ newer one.
 - **Changes**: follow existing patterns, and keep changes small and focused.
 - **Approval**: ask before adding a dependency.
 - **Generated files**: do not edit them or the lockfile by hand.
+- **Actions**: after adding or removing an action in a workflow, run
+  `gh actions-lock` to update `.github/workflows/actions.lock`.
 - **Commits**: use Conventional Commits for commit messages.
 - **This file**: update it in the same change when you change commands,
   tooling or conventions.

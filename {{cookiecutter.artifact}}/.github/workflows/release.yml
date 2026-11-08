@@ -10,10 +10,10 @@ permissions:
 
 jobs:
   build:
-    uses: ./.github/workflows/ci.yml
+    uses: $/.github/workflows/ci.yml
 
   sbom:
-    uses: ./.github/workflows/sbom.yml
+    uses: $/.github/workflows/sbom.yml
 
   release:
     needs: [build, sbom]
@@ -25,13 +25,13 @@ jobs:
       id-token: write
 
     steps:
-      - uses: actions/download-artifact@v8
+      - uses: actions/download-artifact@v8.0.2
         with:
           path: dist
           merge-multiple: true
 
       - name: Attest build provenance
-        uses: actions/attest@v4
+        uses: actions/attest@v4.2.2
         with:
           subject-path: dist/*
 

@@ -11,6 +11,7 @@ EXPECTED_FILES = (
     ".editorconfig",
     "AGENTS.md",
     ".github/dependabot.yml",
+    ".github/workflows/actions.lock",
     ".github/workflows/ci.yml",
     ".github/workflows/release.yml",
     ".github/workflows/sbom.yml",
