@@ -40,7 +40,7 @@ DOCKER_RUN = docker run --rm --interactive \
 
 .PHONY: help
 help: ## Display this help
-	@sed -rn 's/^([a-zA-Z_%-]+):.*?## (.*)$$/"\1" "\2"/p' \
+	@sed -rn 's/^([a-zA-Z0-9_%-]+):.*?## (.*)$$/"\1" "\2"/p' \
 		< $(firstword $(MAKEFILE_LIST)) | \
 		xargs printf "make %-27s# %s\n"
 
