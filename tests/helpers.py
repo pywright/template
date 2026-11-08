@@ -38,6 +38,16 @@ def matrix() -> list[dict[str, str]]:
     ]
 
 
+def variants() -> list[dict[str, str]]:
+    """Every option of every choice variable at least once, as few cases as possible."""
+    options = choices()
+    count = max(len(values) for values in options.values())
+    return [
+        {name: values[i % len(values)] for name, values in options.items()}
+        for i in range(count)
+    ]
+
+
 def case_id(context: dict[str, str]) -> str:
-    """Readable pytest id for one `matrix()` combination."""
+    """Readable pytest id for one `matrix()` or `variants()` case."""
     return "-".join(context.values())

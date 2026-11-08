@@ -6,7 +6,7 @@ from pathlib import Path
 import docker
 import pytest
 
-from tests.helpers import Generate, Render, case_id, matrix
+from tests.helpers import Generate, Render, case_id, variants
 
 TIMEOUT_S = 1800
 BUILDX_PATH = "/usr/local/libexec/docker/cli-plugins/docker-buildx"
@@ -55,7 +55,7 @@ def debian_variables(
 
 
 @pytest.mark.build
-@pytest.mark.parametrize("context", matrix(), ids=case_id)
+@pytest.mark.parametrize("context", variants(), ids=case_id)
 def test_whenAnyParametersAreChosen_expectBuildPasses(
     generate: Generate,
     render: Render,
